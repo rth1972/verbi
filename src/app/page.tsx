@@ -133,7 +133,24 @@ export default function HomePage() {
     }
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("visible");
+            observer.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.08 }
+    );
+    document.querySelectorAll(".scroll-reveal").forEach((el) => observer.observe(el));
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      observer.disconnect();
+    };
   }, []);
 
   const toggleDark = () => {
@@ -150,9 +167,9 @@ export default function HomePage() {
       <nav className={`lp-nav${scrolled ? " lp-nav--scrolled" : ""}`}>
         <a href="/" className="lp-nav__logo">
           <svg width="26" height="26" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" className="lp-nav__logomark">
-            <rect width="32" height="32" rx="7" fill="#18181b"/>
-            <path d="M6 8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H11l-5 4V8z" fill="#c4785a"/>
-            <path d="M11.5 11h2l2.5 6 2.5-6h2l-3.5 9h-2z" fill="#fafaf8"/>
+            <rect width="32" height="32" rx="7" fill="#171717"/>
+            <path d="M6 8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H11l-5 4V8z" fill="#e5e5e5"/>
+            <path d="M11.5 11h2l2.5 6 2.5-6h2l-3.5 9h-2z" fill="#171717"/>
           </svg>
           Verbi
         </a>
@@ -177,29 +194,29 @@ export default function HomePage() {
 
       {/* ── Hero ────────────────────────────────────── */}
       <section className="lp-hero">
-        <div className="lp-hero__label">
+        <div className="lp-hero__label hero-fade-in">
           <svg width="18" height="18" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-            <rect width="32" height="32" rx="7" fill="#c4785a"/>
-            <path d="M6 8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H11l-5 4V8z" fill="#fafaf8"/>
-            <path d="M11.5 11h2l2.5 6 2.5-6h2l-3.5 9h-2z" fill="#c4785a"/>
+            <rect width="32" height="32" rx="7" fill="#e5e5e5"/>
+            <path d="M6 8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H11l-5 4V8z" fill="#171717"/>
+            <path d="M11.5 11h2l2.5 6 2.5-6h2l-3.5 9h-2z" fill="#e5e5e5"/>
           </svg>
           Open-source · Self-hosted · Privacy-first
         </div>
-        <h1 className="lp-hero__h1">
+        <h1 className="lp-hero__h1 hero-fade-in hero-fade-in-1">
           Comments that<br />
           <em>belong to you.</em>
         </h1>
-        <p className="lp-hero__sub">
+        <p className="lp-hero__sub hero-fade-in hero-fade-in-2">
           Verbi is a lightweight, self-hosted comment system. Drop it into any
           site — blog, docs, portfolio — and keep full control of your data.
         </p>
-        <div className="lp-hero__actions">
+        <div className="lp-hero__actions hero-fade-in hero-fade-in-3">
           <a href="#live-demo" className="lp-btn lp-btn--primary">Try the demo</a>
           <a href="#embed" className="lp-btn lp-btn--outline">Read the docs</a>
         </div>
 
         {/* ── Mockup ─────────────────────────────────── */}
-        <div className="lp-mockup">
+        <div className="lp-mockup hero-fade-in hero-fade-in-4">
           <div className="lp-mockup__bar">
             <span className="lp-mockup__dot" />
             <span className="lp-mockup__dot" />
@@ -251,7 +268,7 @@ export default function HomePage() {
       </section>
 
       {/* ── Stats bar ───────────────────────────────── */}
-      <div className="lp-stats">
+      <div className="lp-stats scroll-reveal">
         {[
           { val: "~40 KB", label: "gzipped client" },
           { val: "SQLite", label: "zero config DB" },
@@ -266,7 +283,7 @@ export default function HomePage() {
       </div>
 
       {/* ── Features ────────────────────────────────── */}
-      <section id="features" className="lp-section">
+      <section id="features" className="lp-section scroll-reveal">
         <div className="lp-section__head">
           <h2>Everything you need,<br /><em>nothing you don't.</em></h2>
           <p>A comment system that stays out of your way.</p>
@@ -283,7 +300,7 @@ export default function HomePage() {
       </section>
 
       {/* ── Embed docs ──────────────────────────────── */}
-      <section id="embed" className="lp-section lp-section--alt">
+      <section id="embed" className="lp-section lp-section--alt scroll-reveal">
         <div className="lp-section__head">
           <h2>Embed anywhere.<br /><em>In minutes.</em></h2>
           <p>One div. One script. That's it.</p>
@@ -343,7 +360,7 @@ export default function HomePage() {
       </section>
 
       {/* ── Live demo ───────────────────────────────── */}
-      <section id="live-demo" className="lp-section">
+      <section id="live-demo" className="lp-section scroll-reveal">
         <div className="lp-section__head">
           <h2>Live demo.</h2>
           <p>Try it — post a comment below. It's real.</p>
@@ -357,9 +374,9 @@ export default function HomePage() {
       <footer className="lp-footer">
         <a href="/" className="lp-footer__logo">
           <svg width="20" height="20" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-            <rect width="32" height="32" rx="7" fill="#18181b"/>
-            <path d="M6 8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H11l-5 4V8z" fill="#c4785a"/>
-            <path d="M11.5 11h2l2.5 6 2.5-6h2l-3.5 9h-2z" fill="#fafaf8"/>
+            <rect width="32" height="32" rx="7" fill="#171717"/>
+            <path d="M6 8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H11l-5 4V8z" fill="#e5e5e5"/>
+            <path d="M11.5 11h2l2.5 6 2.5-6h2l-3.5 9h-2z" fill="#171717"/>
           </svg>
           Verbi
         </a>
