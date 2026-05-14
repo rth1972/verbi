@@ -61,3 +61,8 @@ export type Comment = Prisma.CommentModel
  * 
  */
 export type Vote = Prisma.VoteModel
+/**
+ * Model RateLimitLog
+ * 
+ */
+export type RateLimitLog = Prisma.RateLimitLogModel

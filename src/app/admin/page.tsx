@@ -6,7 +6,7 @@ import AdminComments from "@/components/AdminComments";
 
 export default function AdminPage() {
   const [user, setUser] = useState<{ id: string; name: string; email: string } | null>(null);
-  const [defaults, setDefaults] = useState({ email: "", password: "", name: "" });
+  const [defaults, setDefaults] = useState({ email: "", name: "" });
   const [dark, setDark] = useState(false);
 
   useEffect(() => {

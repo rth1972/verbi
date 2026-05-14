@@ -66,3 +66,11 @@ model Vote {
 
   @@unique([userId, commentId])
 }
+
+model RateLimitLog {
+  id        String   @id @default(cuid())
+  key       String
+  timestamp DateTime @default(now())
+
+  @@index([key, timestamp])
+}

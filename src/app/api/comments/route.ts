@@ -6,32 +6,27 @@ import {
 } from "@/lib/mailer";
 import { sendTelegramNotification } from "@/lib/telegram";
 
-// ── In-memory rate limiter ────────────────────────────────
-// Max 5 comments per IP per 10 minutes.
+// ── Persistent rate limiter ──────────────────────────────
+// Max 5 comments per IP per 10 minutes, stored in SQLite.
 const RATE_LIMIT = 5;
 const RATE_WINDOW_MS = 10 * 60 * 1000;
 
-const ipMap = new Map<string, number[]>();
-
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const timestamps = (ipMap.get(ip) || []).filter(
-    (t) => now - t < RATE_WINDOW_MS
-  );
-  if (timestamps.length >= RATE_LIMIT) return true;
-  timestamps.push(now);
-  ipMap.set(ip, timestamps);
+async function isRateLimited(ip: string): Promise<boolean> {
+  const cutoff = new Date(Date.now() - RATE_WINDOW_MS);
+  const recent = await prisma.rateLimitLog.count({
+    where: { key: ip, timestamp: { gte: cutoff } },
+  });
+  if (recent >= RATE_LIMIT) return true;
+  await prisma.rateLimitLog.create({ data: { key: ip } });
   return false;
 }
 
-// Prune old entries every hour to avoid memory leaks
-setInterval(() => {
-  const now = Date.now();
-  for (const [ip, timestamps] of ipMap.entries()) {
-    const fresh = timestamps.filter((t) => now - t < RATE_WINDOW_MS);
-    if (fresh.length === 0) ipMap.delete(ip);
-    else ipMap.set(ip, fresh);
-  }
+// Prune old entries every hour to keep the DB lean
+setInterval(async () => {
+  const cutoff = new Date(Date.now() - RATE_WINDOW_MS);
+  try {
+    await prisma.rateLimitLog.deleteMany({ where: { timestamp: { lt: cutoff } } });
+  } catch { /* ignore */ }
 }, 60 * 60 * 1000);
 
 // ── User select helper ────────────────────────────────────
@@ -105,7 +100,7 @@ export async function POST(req: NextRequest) {
     req.headers.get("x-real-ip") ||
     "unknown";
 
-  if (isRateLimited(ip)) {
+  if (await isRateLimited(ip)) {
     return NextResponse.json(
       { error: "Too many comments. Please wait a few minutes." },
       { status: 429 }
@@ -119,6 +114,22 @@ export async function POST(req: NextRequest) {
   if (!content || !pageKey || !name || !email) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
+
+  if (content.length > 10000) {
+    return NextResponse.json({ error: "Content too long (max 10,000 chars)" }, { status: 400 });
+  }
+  if (name.length > 100) {
+    return NextResponse.json({ error: "Name too long (max 100 chars)" }, { status: 400 });
+  }
+  if (email.length > 320) {
+    return NextResponse.json({ error: "Email too long" }, { status: 400 });
+  }
+  if (websiteUrl && websiteUrl.length > 500) {
+    return NextResponse.json({ error: "Website URL too long" }, { status: 400 });
+  }
+
+  // Strip HTML tags from raw content (defense-in-depth for XSS)
+  const cleanContent = content.replace(/<[^>]*>/g, "");
 
   // Normalise websiteUrl — ensure it has a protocol if provided
   let cleanWebsite: string | null = null;
@@ -179,8 +190,8 @@ export async function POST(req: NextRequest) {
 
   const comment = await prisma.comment.create({
     data: {
-      content,
-      raw: content,
+      content: cleanContent,
+      raw: cleanContent,
       pageKey,
       siteName: site || "default",
       userId: user.id,
@@ -198,7 +209,7 @@ export async function POST(req: NextRequest) {
     authorEmail: email,
     pageKey,
     pageTitle: page.title,
-    content,
+    content: cleanContent,
   };
 
   if (parentComment) {
@@ -212,7 +223,7 @@ export async function POST(req: NextRequest) {
         replyAuthorName: name,
         pageKey,
         pageTitle: page.title,
-        replyContent: content,
+        replyContent: cleanContent,
       }).catch(console.error);
     }
   } else {

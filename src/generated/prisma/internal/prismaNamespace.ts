@@ -387,7 +387,8 @@ export const ModelName = {
   User: 'User',
   Page: 'Page',
   Comment: 'Comment',
-  Vote: 'Vote'
+  Vote: 'Vote',
+  RateLimitLog: 'RateLimitLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -403,7 +404,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "page" | "comment" | "vote"
+    modelProps: "user" | "page" | "comment" | "vote" | "rateLimitLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -703,6 +704,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    RateLimitLog: {
+      payload: Prisma.$RateLimitLogPayload<ExtArgs>
+      fields: Prisma.RateLimitLogFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.RateLimitLogFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitLogPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.RateLimitLogFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitLogPayload>
+        }
+        findFirst: {
+          args: Prisma.RateLimitLogFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitLogPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.RateLimitLogFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitLogPayload>
+        }
+        findMany: {
+          args: Prisma.RateLimitLogFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitLogPayload>[]
+        }
+        create: {
+          args: Prisma.RateLimitLogCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitLogPayload>
+        }
+        createMany: {
+          args: Prisma.RateLimitLogCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.RateLimitLogCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitLogPayload>[]
+        }
+        delete: {
+          args: Prisma.RateLimitLogDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitLogPayload>
+        }
+        update: {
+          args: Prisma.RateLimitLogUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitLogPayload>
+        }
+        deleteMany: {
+          args: Prisma.RateLimitLogDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.RateLimitLogUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.RateLimitLogUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitLogPayload>[]
+        }
+        upsert: {
+          args: Prisma.RateLimitLogUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$RateLimitLogPayload>
+        }
+        aggregate: {
+          args: Prisma.RateLimitLogAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateRateLimitLog>
+        }
+        groupBy: {
+          args: Prisma.RateLimitLogGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RateLimitLogGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.RateLimitLogCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.RateLimitLogCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -797,6 +872,15 @@ export const VoteScalarFieldEnum = {
 } as const
 
 export type VoteScalarFieldEnum = (typeof VoteScalarFieldEnum)[keyof typeof VoteScalarFieldEnum]
+
+
+export const RateLimitLogScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  timestamp: 'timestamp'
+} as const
+
+export type RateLimitLogScalarFieldEnum = (typeof RateLimitLogScalarFieldEnum)[keyof typeof RateLimitLogScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -969,6 +1053,7 @@ export type GlobalOmitConfig = {
   page?: Prisma.PageOmit
   comment?: Prisma.CommentOmit
   vote?: Prisma.VoteOmit
+  rateLimitLog?: Prisma.RateLimitLogOmit
 }
 
 /* Types for Logging */

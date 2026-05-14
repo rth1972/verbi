@@ -54,7 +54,8 @@ export const ModelName = {
   User: 'User',
   Page: 'Page',
   Comment: 'Comment',
-  Vote: 'Vote'
+  Vote: 'Vote',
+  RateLimitLog: 'RateLimitLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -128,6 +129,15 @@ export const VoteScalarFieldEnum = {
 } as const
 
 export type VoteScalarFieldEnum = (typeof VoteScalarFieldEnum)[keyof typeof VoteScalarFieldEnum]
+
+
+export const RateLimitLogScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  timestamp: 'timestamp'
+} as const
+
+export type RateLimitLogScalarFieldEnum = (typeof RateLimitLogScalarFieldEnum)[keyof typeof RateLimitLogScalarFieldEnum]
 
 
 export const SortOrder = {

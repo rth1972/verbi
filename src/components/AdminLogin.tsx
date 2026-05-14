@@ -7,7 +7,7 @@ export default function AdminLogin({
   defaults,
 }: {
   onLogin: (user: { id: string; name: string; email: string }) => void;
-  defaults: { email: string; password: string; name: string };
+  defaults: { email: string; name: string };
 }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

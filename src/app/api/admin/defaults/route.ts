@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server";
+import { getAdminDefaults } from "@/lib/auth";
 
 export async function GET() {
-  return NextResponse.json({
-    email: process.env.VERBI_ADMIN_EMAIL || "admin@verbi.local",
-    password: process.env.VERBI_ADMIN_PASSWORD || "admin123",
-    name: process.env.VERBI_ADMIN_NAME || "Admin",
-  });
+  const { email, name } = getAdminDefaults();
+  return NextResponse.json({ email, name });
 }
