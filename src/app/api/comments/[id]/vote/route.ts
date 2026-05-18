@@ -10,9 +10,16 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 
+  // Find or create the user — someone may vote before ever posting a comment
   let user = await prisma.user.findUnique({ where: { email } });
   if (!user) {
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
+    user = await prisma.user.create({
+      data: {
+        name: email.split("@")[0],
+        email,
+        avatarUrl: null,
+      },
+    });
   }
 
   const existing = await prisma.vote.findUnique({
@@ -21,16 +28,18 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
   if (existing) {
     if (existing.value === value) {
+      // Same vote again → toggle off
       await prisma.vote.delete({ where: { id: existing.id } });
-      return NextResponse.json({ data: { voted: null } });
+      return NextResponse.json({ data: { voted: null, previousValue: existing.value } });
     }
+    // Switching vote direction
     await prisma.vote.update({ where: { id: existing.id }, data: { value } });
-    return NextResponse.json({ data: { voted: value } });
+    return NextResponse.json({ data: { voted: value, previousValue: existing.value } });
   }
 
   await prisma.vote.create({
     data: { userId: user.id, commentId: id, value },
   });
 
-  return NextResponse.json({ data: { voted: value } });
+  return NextResponse.json({ data: { voted: value, previousValue: null } });
 }

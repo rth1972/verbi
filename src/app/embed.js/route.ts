@@ -33,20 +33,20 @@ export async function GET() {
 
   function render(root, cfg) {
     root.innerHTML = [
-      '<div class="max-w-[700px] mx-auto p-5" style="font-family:-apple-system,BlinkMacSystemFont,\\"Segoe UI\\",Roboto,sans-serif;color:#ffffff">',
-      '<div class="flex items-center justify-between pb-3 mb-4" style="border-bottom:1px solid #505050">',
+      '<div class="max-w-[700px] mx-auto p-5" style="font-family:-apple-system,BlinkMacSystemFont,\\"Segoe UI\\",Roboto,sans-serif;color:#171717">',
+      '<div class="flex items-center justify-between pb-3 mb-4" style="border-bottom:1px solid #d4d4d4">',
       '<h3 class="m-0 text-base font-semibold">Comments</h3>',
       '</div>',
       '<form id="ma-form" class="mb-4">',
-      '<textarea id="ma-content" placeholder="Write a comment... (Markdown supported)" rows="4" class="w-full min-h-[90px] p-2.5 border rounded-md text-sm resize-y outline-none box-border" style="border-color:#505050;font-family:inherit;background:#19171c;color:#ffffff"></textarea>',
+      '<textarea id="ma-content" placeholder="Write a comment... (Markdown supported)" rows="4" class="w-full min-h-[90px] p-2.5 border rounded-md text-sm resize-y outline-none box-border" style="border-color:#d4d4d4;font-family:inherit;background:#ffffff;color:#171717"></textarea>',
       '<div class="flex gap-1.5 mt-1.5">',
-      '<input id="ma-name" placeholder="Name *" class="flex-1 p-2 border rounded-md text-sm outline-none" style="border-color:#505050;background:#19171c;color:#ffffff" />',
-      '<input id="ma-email" type="email" placeholder="Email *" class="flex-1 p-2 border rounded-md text-sm outline-none" style="border-color:#505050;background:#19171c;color:#ffffff" />',
+      '<input id="ma-name" placeholder="Name *" class="flex-1 p-2 border rounded-md text-sm outline-none" style="border-color:#d4d4d4;background:#ffffff;color:#171717" />',
+      '<input id="ma-email" type="email" placeholder="Email *" class="flex-1 p-2 border rounded-md text-sm outline-none" style="border-color:#d4d4d4;background:#ffffff;color:#171717" />',
       '</div>',
-      '<button type="submit" class="mt-4 px-4 py-1.5 rounded-md text-sm font-medium border-none cursor-pointer" style="  background:#f3ba40;color:#353535">Comment</button>',
+      '<button type="submit" class="mt-4 px-4 py-1.5 rounded-md text-sm font-medium border-none cursor-pointer" style="  background:#171717;color:#ffffff">Comment</button>',
       '</form>',
-      '<div id="ma-list"><p class="text-center p-5" style="color:#888888;font-size:14px">Loading comments...</p></div>',
-      '<p class="text-center mt-4 text-xs" style="color:#888888"><a href="https://github.com/your-repo/verbi" target="_blank" style="color:#f3ba40;text-decoration:none">Verbi</a></p>',
+      '<div id="ma-list"><p class="text-center p-5" style="color:#a3a3a3;font-size:14px">Loading comments...</p></div>',
+      '<p class="text-center mt-4 text-xs" style="color:#a3a3a3"><a href="https://github.com/your-repo/verbi" target="_blank" style="color:#525252;text-decoration:none">Verbi</a></p>',
       '</div>'
     ].join("\\n");
 
@@ -67,34 +67,34 @@ export async function GET() {
       .then(function(json) {
         var data = json.data || [];
         if (data.length === 0) {
-          list.innerHTML = '<p class="text-center p-5" style="color:#888888;font-size:14px">No comments yet. Be the first!</p>';
+          list.innerHTML = '<p class="text-center p-5" style="color:#a3a3a3;font-size:14px">No comments yet. Be the first!</p>';
           return;
         }
         list.innerHTML = "";
         data.forEach(function(c) { list.appendChild(renderComment(c, cfg, 0)); });
       })
       .catch(function() {
-        list.innerHTML = '<p class="text-center p-5" style="color:#888888;font-size:14px">Failed to load comments.</p>';
+        list.innerHTML = '<p class="text-center p-5" style="color:#a3a3a3;font-size:14px">Failed to load comments.</p>';
       });
   }
 
   function renderComment(c, cfg, depth) {
     var el = document.createElement("div");
     el.className = "py-3.5" + (depth > 0 ? " ml-5 pl-4" : "") + (depth > 0 ? "" : "") + " comment-item";
-    if (depth > 0) el.style.borderLeft = "2px solid #505050";
-    el.style.borderBottom = "1px solid #505050";
+    if (depth > 0) el.style.borderLeft = "2px solid #d4d4d4";
+    el.style.borderBottom = "1px solid #d4d4d4";
     var score = (c.votes || []).reduce(function(s, v) { return s + v.value; }, 0);
     el.innerHTML = [
-      c.isPinned ? '<span class="text-xs" style="color:#f3ba40">📌 Pinned</span>' : "",
+      c.isPinned ? '<span class="text-xs" style="color:#525252">📌 Pinned</span>' : "",
       '<div class="flex items-center gap-1.5 mb-1">',
-      '<span class="w-[26px] h-[26px] rounded-full inline-flex items-center justify-center text-xs font-semibold" style="background:rgba(243,186,64,0.12);color:#f3ba40">' + initials(c.user.name) + '</span>',
+      '<span class="w-[26px] h-[26px] rounded-full inline-flex items-center justify-center text-xs font-semibold" style="background:#f5f5f5;color:#525252">' + initials(c.user.name) + '</span>',
       '<span class="text-sm font-medium">' + esc(c.user.name) + '</span>',
-      '<span class="text-xs" style="color:#888888">' + timeAgo(c.createdAt) + '</span>',
+      '<span class="text-xs" style="color:#a3a3a3">' + timeAgo(c.createdAt) + '</span>',
       '</div>',
       '<div class="text-sm leading-relaxed my-1 ma-body">' + md(c.content) + '</div>',
-      '<div class="flex items-center gap-2.5 text-xs" style="color:#cccccc">',
+      '<div class="flex items-center gap-2.5 text-xs" style="color:#525252">',
       '<button class="ma-vote bg-none border-none cursor-pointer" data-id="' + c.id + '" data-v="1" style="color:inherit;padding:2px 4px">▲</button>',
-      score !== 0 ? '<span class="text-xs" style="color:#cccccc">' + score + '</span>' : "",
+      score !== 0 ? '<span class="text-xs" style="color:#525252">' + score + '</span>' : "",
       '<button class="ma-vote bg-none border-none cursor-pointer" data-id="' + c.id + '" data-v="-1" style="color:inherit;padding:2px 4px">▼</button>',
       '<button class="ma-reply-btn bg-none border-none cursor-pointer" data-id="' + c.id + '" style="color:inherit;padding:2px 4px">↩ Reply</button>',
       '</div>',
@@ -130,12 +130,12 @@ export async function GET() {
   function renderReplyForm(cfg, parentId) {
     return [
       '<form class="ma-reply-form-inner mt-3">',
-      '<textarea class="w-full min-h-[70px] p-2 border rounded-md text-sm resize-y outline-none box-border" placeholder="Write a reply..." rows="3" style="border-color:#505050;font-family:inherit;background:#19171c;color:#ffffff"></textarea>',
+      '<textarea class="w-full min-h-[70px] p-2 border rounded-md text-sm resize-y outline-none box-border" placeholder="Write a reply..." rows="3" style="border-color:#d4d4d4;font-family:inherit;background:#ffffff;color:#171717"></textarea>',
       '<div class="flex gap-1.5 mt-1.5">',
-      '<input class="flex-1 p-2 border rounded-md text-sm outline-none" placeholder="Name *" style="border-color:#505050;background:#19171c;color:#ffffff" />',
-      '<input class="flex-1 p-2 border rounded-md text-sm outline-none" placeholder="Email *" style="border-color:#505050;background:#19171c;color:#ffffff" />',
+      '<input class="flex-1 p-2 border rounded-md text-sm outline-none" placeholder="Name *" style="border-color:#d4d4d4;background:#ffffff;color:#171717" />',
+      '<input class="flex-1 p-2 border rounded-md text-sm outline-none" placeholder="Email *" style="border-color:#d4d4d4;background:#ffffff;color:#171717" />',
       '</div>',
-      '<button type="submit" class="mt-2 px-3 py-1 rounded-md text-xs font-medium border-none cursor-pointer" style="  background:#f3ba40;color:#353535">Reply</button>',
+      '<button type="submit" class="mt-2 px-3 py-1 rounded-md text-xs font-medium border-none cursor-pointer" style="  background:#171717;color:#ffffff">Reply</button>',
       '</form>'
     ].join("\\n");
   }

@@ -297,12 +297,12 @@ export default function VerbiEmbed({ server, site, pageKey, pageTitle }: VerbiCo
   useEffect(() => { fetchComments(); }, [fetchComments]);
 
   return (
-    <div style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', color: "var(--text, #ffffff)", maxWidth: 700, margin: "0 auto", padding: "20px 0" }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, paddingBottom: 12, borderBottom: "1px solid var(--border, #505050)" }}>
+    <div style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', color: "var(--text, #171717)", maxWidth: 700, margin: "0 auto", padding: "20px 0" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, paddingBottom: 12, borderBottom: "1px solid var(--border, #d4d4d4)" }}>
         <h3 style={{ fontSize: 16, fontWeight: 600, margin: 0 }}>Comments ({total})</h3>
         <div style={{ display: "flex", gap: 4 }}>
           {["newest", "oldest"].map((s) => (
-            <button key={s} onClick={() => setSort(s)} style={{ ...styles.sortBtn, background: sort === s ? "var(--primary, #f3ba40)" : "transparent", color: sort === s ? "#fff" : "var(--text-secondary, #cccccc)" }}>{s === "newest" ? "Newest" : "Oldest"}</button>
+            <button key={s} onClick={() => setSort(s)} style={{ ...styles.sortBtn, background: sort === s ? "var(--primary, #171717)" : "transparent", color: sort === s ? "var(--primary-text, #ffffff)" : "var(--text-secondary, #525252)" }}>{s === "newest" ? "Newest" : "Oldest"}</button>
           ))}
         </div>
       </div>
@@ -311,17 +311,17 @@ export default function VerbiEmbed({ server, site, pageKey, pageTitle }: VerbiCo
 
       <div style={{ marginTop: 20 }}>
         {loading ? (
-          <p style={{ textAlign: "center", padding: 20, color: "var(--text-muted, #888888)" }}>Loading comments...</p>
+          <p style={{ textAlign: "center", padding: 20, color: "var(--text-muted, #a3a3a3)" }}>Loading comments...</p>
         ) : comments.length === 0 ? (
-          <p style={{ textAlign: "center", padding: 20, color: "var(--text-muted, #888888)" }}>No comments yet. Be the first!</p>
+          <p style={{ textAlign: "center", padding: 20, color: "var(--text-muted, #a3a3a3)" }}>No comments yet. Be the first!</p>
         ) : (
           comments.map((c) => (
             <CommentItem key={c.id} comment={c} server={server} site={site} pageKey={pageKey} pageTitle={pageTitle} userEmail={userEmail} onAction={fetchComments} />
           ))
         )}
       </div>
-      <p style={{ fontSize: 11, color: "var(--text-muted, #888888)", textAlign: "center", marginTop: 16 }}>
-        Powered by <a href="https://github.com/your-repo/verbi" style={{ color: "var(--primary, #f3ba40)" }}>Verbi</a>
+      <p style={{ fontSize: 11, color: "var(--text-muted, #a3a3a3)", textAlign: "center", marginTop: 16 }}>
+        Powered by <a href="https://github.com/your-repo/verbi" style={{ color: "var(--primary, #171717)" }}>Verbi</a>
       </p>
     </div>
   );
@@ -330,7 +330,7 @@ export default function VerbiEmbed({ server, site, pageKey, pageTitle }: VerbiCo
 // ─── Styles ───────────────────────────────────────────────
 
 const btn: React.CSSProperties = {
-  background: "none", border: "none", cursor: "pointer", color: "var(--text-secondary, #cccccc)", fontSize: 12, padding: "2px 4px",
+  background: "none", border: "none", cursor: "pointer", color: "var(--text-secondary, #525252)", fontSize: 12, padding: "2px 4px",
 };
 
 const emojiBtn: React.CSSProperties = {
@@ -339,13 +339,13 @@ const emojiBtn: React.CSSProperties = {
 
 const styles: Record<string, React.CSSProperties> = {
   comment: {
-    padding: "14px 0", borderBottom: "1px solid var(--border, #505050)",
+    padding: "14px 0", borderBottom: "1px solid var(--border, #d4d4d4)",
   },
   userRow: {
     display: "flex", alignItems: "center", gap: 6, marginBottom: 4,
   },
   avatar: {
-    width: 26, height: 26, borderRadius: "50%", background: "var(--primary-light, rgba(243,186,64,0.12))", color: "var(--primary, #f3ba40)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 600,
+    width: 26, height: 26, borderRadius: "50%", background: "var(--primary-light, #f5f5f5)", color: "var(--primary, #171717)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 600,
   },
   content: {
     fontSize: 14, lineHeight: 1.6, margin: "4px 0 6px",
@@ -354,21 +354,21 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex", alignItems: "center", gap: 10, fontSize: 12,
   },
   textarea: {
-    width: "100%", minHeight: 90, padding: 10, border: "1px solid var(--border, #505050)", borderRadius: 6, background: "var(--bg, #19171c)", color: "var(--text, #ffffff)", fontSize: 14, resize: "vertical" as const, outline: "none", boxSizing: "border-box" as const,
+    width: "100%", minHeight: 90, padding: 10, border: "1px solid var(--border, #d4d4d4)", borderRadius: 6, background: "var(--bg, #ffffff)", color: "var(--text, #171717)", fontSize: 14, resize: "vertical" as const, outline: "none", boxSizing: "border-box" as const,
   },
   input: {
-    flex: 1, padding: "8px 10px", border: "1px solid var(--border, #505050)", borderRadius: 6, background: "var(--bg, #19171c)", color: "var(--text, #ffffff)", fontSize: 13, outline: "none",
+    flex: 1, padding: "8px 10px", border: "1px solid var(--border, #d4d4d4)", borderRadius: 6, background: "var(--bg, #ffffff)", color: "var(--text, #171717)", fontSize: 13, outline: "none",
   },
   primaryBtn: {
-    padding: "7px 16px", borderRadius: 6, fontSize: 13, fontWeight: 600, border: "none", cursor: "pointer", background: "var(--primary, #f3ba40)", color: "#353535",
+    padding: "7px 16px", borderRadius: 6, fontSize: 13, fontWeight: 600, border: "none", cursor: "pointer", background: "var(--primary, #171717)", color: "var(--primary-text, #ffffff)",
   },
   ghostBtn: {
-    padding: "7px 16px", borderRadius: 6, fontSize: 13, fontWeight: 500, border: "none", cursor: "pointer", background: "transparent", color: "var(--text-secondary, #cccccc)",
+    padding: "7px 16px", borderRadius: 6, fontSize: 13, fontWeight: 500, border: "none", cursor: "pointer", background: "transparent", color: "var(--text-secondary, #525252)",
   },
   sortBtn: {
     padding: "4px 10px", borderRadius: 6, fontSize: 12, border: "none", cursor: "pointer", fontWeight: 500,
   },
   emojiPicker: {
-    position: "absolute" as const, zIndex: 10, display: "flex", flexWrap: "wrap" as const, gap: 4, padding: 8, border: "1px solid var(--border, #505050)", borderRadius: 6, background: "var(--bg, #19171c)", marginTop: 4, width: 220,
+    position: "absolute" as const, zIndex: 10, display: "flex", flexWrap: "wrap" as const, gap: 4, padding: 8, border: "1px solid var(--border, #d4d4d4)", borderRadius: 6, background: "var(--bg, #ffffff)", marginTop: 4, width: 220,
   },
 };

@@ -381,12 +381,6 @@ export default function HomePage() {
           Verbi
         </a>
         <span>Self-hosted comments for the open web.</span>
-        <span>
-          Inspired by{" "}
-          <a href="https://artalk.js.org" target="_blank" rel="noopener noreferrer">
-            Artalk
-          </a>
-        </span>
       </footer>
     </div>
   );
